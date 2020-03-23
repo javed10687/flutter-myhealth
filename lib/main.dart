@@ -1,5 +1,8 @@
+import 'dart:io';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:myhealth/models/test_data.dart';
+import 'package:myhealth/labs.dart';
 
 void main() => runApp(MyApp());
 
@@ -10,18 +13,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'My Health Check',
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // Try running your application with "flutter run". You'll see the
-        // application has a blue toolbar. Then, without quitting the app, try
-        // changing the primarySwatch below to Colors.green and then invoke
-        // "hot reload" (press "r" in the console where you ran "flutter run",
-        // or simply save your changes to "hot reload" in a Flutter IDE).
-        // Notice that the counter didn't reset back to zero; the application
-        // is not restarted.
-        primarySwatch: Colors.blue,
-      ),
+      theme: themeColor(context),
       home: MyHomePage(),
     );
   }
@@ -126,7 +118,7 @@ class MyHomePage extends StatelessWidget {
 List<Container> _buildGridCards(BuildContext context) {
   return labs.map((lab) {
     return Container(
-      height: 500,
+      height: 50,
       child: Card(
         // color: Colors.red[200],
         shape:
@@ -134,8 +126,11 @@ List<Container> _buildGridCards(BuildContext context) {
         color: Colors.orange,
         elevation: 4.0,
         margin: EdgeInsets.all(8),
-        clipBehavior: Clip.none,
-        child: Column(
+        clipBehavior: Clip.hardEdge,
+        child: InkWell(
+          splashColor: Colors.deepOrangeAccent,
+          highlightColor: Colors.orange,
+          child : Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: <Widget>[
@@ -166,7 +161,11 @@ List<Container> _buildGridCards(BuildContext context) {
                 ),
               )
             ]),
+          onTap: (){
+            _pageRoute(context, lab);
+          },
       ),
+      )
     );
   }).toList();
 }
@@ -182,31 +181,34 @@ List<Container> _packages(BuildContext context) {
         color: Colors.orange,
         elevation: 4.0,
         margin: EdgeInsets.all(8),
-        clipBehavior: Clip.none,
-        child: Column(
+        clipBehavior: Clip.hardEdge,
+        child: InkWell(
+          splashColor: Colors.deepOrangeAccent,
+          highlightColor: Colors.orange,
+          child:Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: <Widget>[
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: AspectRatio(
-                    aspectRatio: 11.0 / 7.0, child: Icon(Icons.pan_tool)),
+                    aspectRatio: 11.0 / 6.5, child: Icon(Icons.pan_tool)),
               ),
               Padding(
-                padding: EdgeInsets.only(bottom: 20, left: 10, right: 5),
+                padding: EdgeInsets.only(bottom: 20, left: 15, right: 5),
                 child: Row(
                   children: <Widget>[
                     Text(
-                      "Rs 1200",
+                      "\u20B91200",
                       style: TextStyle(
-                          decoration: TextDecoration.lineThrough, fontSize: 10),
+                          decoration: TextDecoration.lineThrough, fontSize: 11),
                       maxLines: 1,
                     ),
                     SizedBox(
                       width: 5,
                     ),
                     Text(
-                      "Rs 900",
+                      "\u20B9900",
                       style: TextStyle(
                           color: Colors.red,
                           fontWeight: FontWeight.bold,
@@ -217,7 +219,24 @@ List<Container> _packages(BuildContext context) {
                 ),
               )
             ]),
+          onTap: (){
+          },
+      ),
       ),
     );
   }).toList();
+}
+
+ThemeData themeColor(BuildContext context){
+  return ThemeData(
+    primarySwatch: Colors.blue,
+  );
+}
+
+void _pageRoute(BuildContext context, lab){
+  Navigator.of(context).push(
+    CupertinoPageRoute(
+      builder: (context) => (Labs(logo: new LabsDetails(lab['name'], lab['logo_img']))),
+    ),
+  );
 }
