@@ -118,7 +118,6 @@ class MyHomePage extends StatelessWidget {
 List<Container> _buildGridCards(BuildContext context) {
   return labs.map((lab) {
     return Container(
-      height: 50,
       child: Card(
         // color: Colors.red[200],
         shape:
